@@ -4,6 +4,7 @@ from keras.datasets import cifar100
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
+from keras.callbacks import ModelCheckpoint
 from keras import backend as K
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,8 +29,12 @@ cifar100_label_list = np.array([
     'worm'
 ])
 
+# fix random seed for reproducibility
+seed = 7
+np.random.seed(seed)
+
 batch_size = 128
-num_classes = 20
+num_classes = 100
 epochs = 12
 
 # input image dimensions
@@ -39,9 +44,6 @@ img_rows, img_cols = 32, 32
 
 # SUPERCLASSE
 (x_train, y_train), (x_test, y_test) = cifar100.load_data(label_mode='fine')
-
-# CLASSE
-# (x_train, y_train), (x_test, y_test) = cifar100.load_data(label_mode='fine')
 
 input_shape = (img_rows, img_cols, 3)
 
@@ -72,9 +74,14 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
+filepath="weights-fine.best.hdf5"
+checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+callbacks_list = [checkpoint]
+
 model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
+          callbacks=callbacks_list,
           verbose=1,
           validation_data=(x_test, y_test))
 
@@ -82,20 +89,3 @@ score = model.evaluate(x_test, y_test, verbose=0)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
-
-y_hat = model.predict(x_test)
-
-# Plot a random sample of 10 test images, their predicted labels and ground truth
-figure = plt.figure(figsize=(20, 8))
-for i, index in enumerate(np.random.choice(x_test.shape[0], size=15, replace=False)):
-    ax = figure.add_subplot(3, 5, i + 1, xticks=[], yticks=[])
-    # Display each image
-    ax.imshow(np.squeeze(x_test[index]))
-    predict_index = np.argmax(y_hat[index])
-    true_index = np.argmax(y_test[index])
-    # Set the title for each image
-    ax.set_title("{} ({})".format(cifar100_label_list[predict_index], 
-                                  cifar100_label_list[true_index]),
-                                  color=("green" if predict_index == true_index else "red"))
-
-plt.show()
