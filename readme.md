@@ -1,15 +1,19 @@
 Códigos para os Exercícios de Deep Learning
 ====
 
-Versão de Python utilizada: **3.6+**
+Versão de Python utilizada: **3.6.7**
 
 
 Arquivos:
 ----
-
-- cnn_cifar100-fine.py: Modelo baseada nos rótulos específicos do dataset;
   
-- cnn_cifar100-coarse.py: Modelo baseado nos rótulos das superclasses.
+- cnn_cifar100-(coarse|fine).py: Compila o modelo, exporta as melhores deifinições de peso, e apresenta o resultado geral de acurácia. Módulo baseado nos rótulos das superclasses/classes do dataset;
+
+- cnn_cifar100-(coarse|fine)-test.py: Executa os modelos para cada superclasse ou classe, apresentando os resultados específicos para cada classe, além de gerar ao menos 2 imagens de erros de predição;
+
+- my_utils.py: Métodos úteis para a atividade;
+
+- weights-(coarse|fine).best-hdf5: Os melhores pesos encontrados para o modelo.
 
 - requirements.txt: Lista das bibliotecas obrigatórias para execução das redes convolucionais.
 
