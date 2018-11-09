@@ -8,14 +8,12 @@ from keras import backend as K
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-import glob
 import scipy.misc
 import PIL
+import my_utils
+import os
 
-files = glob.glob('./errors/coarse/*')
-for f in files:
-    os.remove(f)
+my_utils.prepare_error_output('coarse')
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -121,6 +119,7 @@ for class_idx, _class_ in enumerate(cifar100_label_list):
                     os.makedirs(directory)
 
                 rgb = scipy.misc.toimage(x_picked_test[i])
-                rgb.save("%s/%s.jpg" % (directory, cifar100_label_list[predict_index]))
+                rgb.save("%s/%s-%i.jpg" % (directory, cifar100_label_list[predict_index], i))
 
-                error_count += 1
+                error_count = error_count + 1
+

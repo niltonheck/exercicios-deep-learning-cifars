@@ -9,15 +9,13 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import glob
 import scipy.misc
 import PIL
-
-files = glob.glob('./errors/fine/*')
-for f in files:
-    os.remove(f)
+import my_utils
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+my_utils.prepare_error_output('fine')
 
 cifar100_label_list = np.array([
     'apple', 'aquarium_fish', 'baby', 'bear', 'beaver', 'bed', 'bee', 'beetle', 
@@ -117,6 +115,6 @@ for class_idx, _class_ in enumerate(cifar100_label_list):
                     os.makedirs(directory)
 
                 rgb = scipy.misc.toimage(x_picked_test[i])
-                rgb.save("%s/%s.jpg" % (directory, cifar100_label_list[predict_index]))
+                rgb.save("%s/%si-%i.jpg" % (directory, cifar100_label_list[predict_index], i))
 
                 error_count += 1
