@@ -2,7 +2,7 @@ from __future__ import print_function
 import keras
 from keras.datasets import cifar100
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Dense, Dropout, Flatten, Input
 from keras.layers import Conv2D, MaxPooling2D
 from keras.callbacks import ModelCheckpoint
 from keras import backend as K
@@ -35,7 +35,7 @@ np.random.seed(seed)
 
 batch_size = 128
 num_classes = 100
-epochs = 35
+epochs = 12
 
 # input image dimensions
 img_rows, img_cols = 32, 32
@@ -58,6 +58,10 @@ print(x_test.shape[0], 'test samples')
 # convert class vectors to binary class matrices
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
+
+image_input = Input(shape=(32, 32, 3))
+
+# model = keras.applications.resnet50.ResNet50(input_tensor=image_input, include_top=True,weights='imagenet')
 
 model = Sequential()
 model.add(Conv2D(32, kernel_size=(3, 3),
